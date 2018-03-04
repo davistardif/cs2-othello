@@ -1,6 +1,6 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
-
+#define OPPONENT_SIDE (side == WHITE ? BLACK : WHITE)
 enum Side { 
     WHITE, BLACK
 };
