@@ -178,3 +178,33 @@ void Board::setBoard(char data[]) {
         }
     }
 }
+
+/*
+ * Gets a list of available moves optimized for speed
+ */
+std::List<Move> getMoves(Side side) {
+    List<Move> moves;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            // check if already taken
+            if (!occupied(i, j)) {
+                // check for adjacent opponent tiles as heuristic
+                if ((onBoard(i+1,j) && get(OPPONENT_SIDE, i+1, j)) ||
+                    (onBoard(i+1,j-1) && get(OPPONENT_SIDE, i+1, j-1)) ||
+                    (onBoard(i+1,j+1) && get(OPPONENT_SIDE, i+1, j+1)) ||
+                    (onBoard(i-1,j) && get(OPPONENT_SIDE, i-1, j)) ||
+                    (onBoard(i-1,j-1) && get(OPPONENT_SIDE, i-1, j-1)) ||
+                    (onBoard(i-1,j+1) && get(OPPONENT_SIDE, i-1, j+1)) ||
+                    (onBoard(i,j-1) && get(OPPONENT_SIDE, i, j-1)) ||
+                    (onBoard(i,j+1) && get(OPPONENT_SIDE, i, j+1)))
+                    {
+                        //actually check the move if passed heuristic
+                        if (checkMove(side, i, j)) {
+                            moves.push_back(Move(i,j));
+                        }
+                    }
+            }
+        }
+    }
+    return moves;
+}
