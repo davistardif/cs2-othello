@@ -31,7 +31,7 @@ public:
     int countWhite();
 
     void setBoard(char data[]);
-    std::List<Move> getMoves(Side side);
+    std::list<Move> getMoves(Side side);
 };
 
 #endif
