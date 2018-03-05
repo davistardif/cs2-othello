@@ -47,8 +47,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's move before calculating your own move
      */
-    time_t start_time;
-    time(&start_time);
+    auto start = std::chrono::high_resolution_clock::now();
     board->doMove(opponentsMove, OPPONENT_SIDE);
     std::list<Move> moves = board->getMoves(side);
     // TODO: calculate the heuristic of each move
@@ -61,9 +60,11 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     int weight;
     int depth = (testingMinimax? 2 : 3);
     //until time is up, look for better moves
+    auto end = std::chrono::high_resolution_clock::now();
     while ((msLeft <= 0 ||
-           difftime(start_time, time(NULL)) > (double) (msLeft - 25) / 1000.)  &&
+            (end - start).count() * 1000 >  (msLeft - 25))  &&
            it != moves.end()) {
+        end = std::chrono::high_resolution_clock::now();
         weight = minimax(&(*it), board, depth, side);
         //weight = board->weightMove(&(*it), side);
         if (weight > maxWeight) {

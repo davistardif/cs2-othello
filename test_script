@@ -2,11 +2,11 @@
 echo 'We are white'
 for i in {1..10}
 do
-    ./testgame SimplePlayer cs2_drop_squad &
+    ./testgame SimplePlayer cs2_drop_squad 300000 &
 done
 sleep 20
 echo 'We are black'
 for i in {1..10}
 do
-    ./testgame cs2_drop_squad SimplePlayer &    
+    ./testgame cs2_drop_squad SimplePlayer 300000 &    
 done
