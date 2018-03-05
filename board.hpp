@@ -32,6 +32,7 @@ public:
 
     void setBoard(char data[]);
     std::list<Move> getMoves(Side side);
+    int simpleHeuristic(Move *move, Side side);
 };
 
 #endif
