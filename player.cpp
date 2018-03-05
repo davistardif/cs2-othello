@@ -64,7 +64,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     while ((msLeft < 0 ||
            difftime(start_time, time(NULL)) > (double) (msLeft + 5) / 1000.)  &&
            it != moves.end()) {
-        weight = board->weightMove(&(*it), side);
+        weight = board->minimax(&(*it), 2, side);
         if (weight < minWeight) {
             move = *it;
             minWeight = weight;
@@ -77,9 +77,20 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return ret;
 }
 
-int *Player::minimax(Board board, int depth, Side side) {
-    if (depth == 0 || node == nullptr){
-        return board;
-    }
-}
+int Player::minimax(Move *move, int depth, Side side) {
     
+    if (depth <= 0 || move == nullptr){
+        return simpleHeuristic(move, side);
+    }
+    int a = -30000;
+    Board *temp = this->copy();
+    temp->doMove(move, side);
+    std::list<Move> moves = temp->getMoves(side);
+    std::list<Move>::iterator it = moves.begin(); 
+    Move move = *it;
+    while (it != moves.end()) {
+        a = std::max(a, -minimax((*it), depth - 1, OPPONENT_SIDE));
+        it++;
+    }
+    return a;
+}
