@@ -210,12 +210,24 @@ std::list<Move> Board::getMoves(Side side) {
     return moves;
 }
 
-int weightMove(Move *move, Side side) {
-    int weights[8][8] = {{4, -3, 2, 2, 2, 2, -3, 4}, {-3, -4, -1, -1, -1, -1, -4, -3}, {2, -1, 1, 0, 0, 1, -1, 2}, {2, -1, 0, 1, 1, 0, -1, 2}, {2, -1, 0, 1, 1, 0, -1, 2}, {2, -1, 1, 0, 0, 1, -1, 2}, {-3, -4, -1, -1, -1, -1, -4, -3}, {4, -3, 2, 2, 2, 2, -3, 4}};
+/*
+ * Heuristic function that uses static weights based on board placement
+ * as well as the simple heuristic
+ */
+int Board::weightMove(Move *move, Side side) {
+    int weights[8][8] = {
+        {4, -3, 2, 2, 2, 2, -3, 4},
+        {-3, -4, -1, -1, -1, -1, -4, -3},
+        {2, -1, 1, 0, 0, 1, -1, 2},
+        {2, -1, 0, 1, 1, 0, -1, 2},
+        {2, -1, 0, 1, 1, 0, -1, 2},
+        {2, -1, 1, 0, 0, 1, -1, 2},
+        {-3, -4, -1, -1, -1, -1, -4, -3},
+        {4, -3, 2, 2, 2, 2, -3, 4} };
     Board *temp = this->copy();
     temp->doMove(move, side);
-    int side_count; 
-    int opposite_side_count;
+    int side_count = 0; 
+    int opposite_side_count = 0;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             if (temp->get(side, i, j)) {
@@ -226,8 +238,10 @@ int weightMove(Move *move, Side side) {
             }
         }
     }
-    int val = temp->count(side) - temp -> count(OPPONENT_SIDE) + side_count - opposite_side_count;
-    return val;
+    int static_val = side_count - opposite_side_count;
+    int pieces_val = temp->count(side) - temp -> count(OPPONENT_SIDE);
+    int mobility = getMoves(side).size();
+    return 3 * mobility + 2 * static_val + pieces_val;
 }
     
 /*

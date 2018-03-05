@@ -154,6 +154,7 @@ public class OthelloDisplay
    {
       setTitle("Observing " + blackName + " vs. " + whiteName);
       stateLabel.setText("Game over!  Result: " + r);
+      System.out.println(r);
    }
 
    public void init(OthelloSide side)
