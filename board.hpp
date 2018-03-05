@@ -4,6 +4,7 @@
 #include <bitset>
 #include "common.hpp"
 #include <list>
+#include <iostream>
 
 
 using namespace std;

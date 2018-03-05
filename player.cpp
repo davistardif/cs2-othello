@@ -56,11 +56,25 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     if (moves.size() == 0) {
         return nullptr;
     }
-    //For now, return any old move
-    Move first = *(moves.begin());
-    Move *move = new Move(first.getX(),first.getY());
-    board->doMove(move, side);
-    return move;
+    std::list<Move>::iterator it = moves.begin();
+    int minWeight = INT_MAX;
+    Move move = *it;
+    int weight;
+    //until time is up, look for better moves
+    while ((msLeft < 0 ||
+           difftime(start_time, time(NULL)) > (double) (msLeft + 5) / 1000.)  &&
+           it != moves.end()) {
+        weight = board->weightMove(&(*it), side);
+        if (weight < minWeight) {
+            move = *it;
+            minWeight = weight;
+        }
+        it++;
+    }
+    //Return the move
+    Move *ret = new Move(move.getX(),move.getY());
+    board->doMove(ret, side);
+    return ret;
 }
 
 int *Player::minimax(Board board, int depth, Side side) {
