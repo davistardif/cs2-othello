@@ -238,8 +238,8 @@ int Board::weightMove(Move *move, Side side) {
         }
     }
     int pieces_val = temp->count(side) - temp->count(OPPONENT_SIDE);
-    int mobility =  temp->getMoves(side).size();
-    return  3 * mobility + 2 * static_val + pieces_val;
+    int mobility =  temp->getMoves(OPPONENT_SIDE).size();
+    return  -2 * mobility + 2 * static_val + pieces_val;
 }
     
 /*
