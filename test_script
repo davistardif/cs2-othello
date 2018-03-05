@@ -1,5 +1,5 @@
 #!/bin/bash
-for i in {1..10}
+for i in {1..30}
 do
     ./testgame SimplePlayer cs2_drop_squad 300000 &
 done
