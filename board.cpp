@@ -217,3 +217,15 @@ Move bestMove() {
     std::List<Move> Moves = getMoves(Side side)
 }
     
+/*
+ * Returns number of side tiles - number !side tiles
+ * After move is performed
+ */
+int Board::simpleHeuristic(Move *move, Side side) {
+    Board *temp = this->copy();
+    temp->doMove(move, side);
+    int val = temp->count(side) - temp->count(OPPONENT_SIDE);
+    delete temp;
+    return val;
+}
+

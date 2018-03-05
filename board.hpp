@@ -34,6 +34,7 @@ public:
 
     std::List<Move> getMoves(Side side);
     Move bestMove();
+    int simpleHeuristic(Move *move, Side side);
 };
 
 #endif
