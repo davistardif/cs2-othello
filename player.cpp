@@ -56,7 +56,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         return nullptr;
     }
     std::list<Move>::iterator it = moves.begin();
-    int minWeight = INT_MAX;
+    int maxWeight = INT_MIN;
     Move move = *it;
     int weight;
     //until time is up, look for better moves
@@ -65,9 +65,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
            it != moves.end()) {
         //weight = minimax(&(*it), board, 2, side);
         weight = board->weightMove(&(*it), side);
-        if (weight < minWeight) {
+        if (weight > maxWeight) {
             move = *it;
-            minWeight = weight;
+            maxWeight = weight;
         }
         it++;
     }
