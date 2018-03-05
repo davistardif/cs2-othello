@@ -4,8 +4,7 @@
 #include <bitset>
 #include "common.hpp"
 #include <list>
-#include <iostream>
-#include <vector> 
+
 
 using namespace std;
 
@@ -24,7 +23,6 @@ public:
     Board();
     ~Board();
     Board *copy();
-
     bool isDone();
     bool hasMoves(Side side);
     bool checkMove(Move *m, Side side);
@@ -32,11 +30,9 @@ public:
     int count(Side side);
     int countBlack();
     int countWhite();
-
     void setBoard(char data[]);
-
     std::list<Move> getMoves(Side side);
-    Move bestMove();
+    int weightMove(Move *move, Side side);
     int simpleHeuristic(Move *move, Side side);
 };
 
