@@ -226,21 +226,16 @@ int Board::weightMove(Move *move, Side side) {
         {4, -3, 2, 2, 2, 2, -3, 4} };
     Board *temp = this->copy();
     temp->doMove(move, side);
-    int side_count = 0; 
-    int opposite_side_count = 0;
+    int static_val = 0; 
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             if (temp->get(side, i, j)) {
-                side_count += weights[i][j];
-            }
-            else if (temp->get(OPPONENT_SIDE, i, j)) {
-                opposite_side_count += weights[i][j];
+                static_val += weights[i][j];
             }
         }
     }
-    int static_val = side_count - opposite_side_count;
-    int pieces_val = temp->count(side) - temp -> count(OPPONENT_SIDE);
-    int mobility = getMoves(side).size();
+    int pieces_val = temp->count(side) - temp->count(OPPONENT_SIDE);
+    int mobility = -1 * temp->getMoves(OPPONENT_SIDE).size();
     return 3 * mobility + 2 * static_val + pieces_val;
 }
     
