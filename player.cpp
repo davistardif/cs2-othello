@@ -1,7 +1,4 @@
 #include "player.hpp"
-// davis was here
-// aditk was here 
-// galileo was here
 
 /*
  * Constructor for the player; initialize everything here. The side your AI is
@@ -54,5 +51,15 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         return nullptr;
         } */
     board->doMove(opponentsMove, OPPONENT_SIDE);
-    
+    std::list<Move> moves = board->getMoves(side);
+    // TODO: calculate the heuristic of each move
+    if (moves.size() == 0) {
+        return nullptr;
+    }
+    //For now, return any old move
+    Move first = *(moves.begin());
+    Move *move = new Move(first.getX(),first.getY());
+    board->doMove(move, side);
+    return move;
+}
     

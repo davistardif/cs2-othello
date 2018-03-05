@@ -31,6 +31,7 @@ public:
     int countWhite();
 
     void setBoard(char data[]);
+
     std::List<Move> getMoves(Side side);
     Move bestMove();
 };

@@ -182,8 +182,8 @@ void Board::setBoard(char data[]) {
 /*
  * Gets a list of available moves optimized for speed
  */
-std::List<Move> getMoves(Side side) {
-    List<Move> moves;
+std::list<Move> Board::getMoves(Side side) {
+    std::list<Move> moves;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             // check if already taken
@@ -199,8 +199,9 @@ std::List<Move> getMoves(Side side) {
                     (onBoard(i,j+1) && get(OPPONENT_SIDE, i, j+1)))
                     {
                         //actually check the move if passed heuristic
-                        if (checkMove(side, i, j)) {
-                            moves.push_back(Move(i,j));
+                        Move move(i, j);
+                        if (checkMove(&move, side)) {
+                            moves.push_back(move);
                         }
                     }
             }
