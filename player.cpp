@@ -80,7 +80,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 int Player::minimax(Move *move, int depth, Side side) {
     if (testingMinimax) {
         if (depth <= 0 || move == nullptr){
-            return simpleHeuristic(move, side);
+            return board->simpleHeuristic(move, side);
         }
         int a = -30000;
         Board *temp = this->copy();
@@ -96,8 +96,8 @@ int Player::minimax(Move *move, int depth, Side side) {
     }
 
     else {
-       if (depth <= 0 || move == nullptr){
-            return weightMove(move, side);
+       if (depth <= 0 || move == nullptr){0
+            return board->weightMove(move, side);
         }
         int a = -30000;
         Board *temp = this->copy();
