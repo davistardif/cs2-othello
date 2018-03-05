@@ -219,8 +219,10 @@ public class OthelloGame implements Runnable {
         final long timeout = (turn == OthelloSide.BLACK)?blackTimeout:whiteTimeout;
         // If they happen to get exactly 0 milliseconds, prevent them from just
         // taking forever.
-        if(timed && timeout <= 0)
-           throw new TimeoutException();
+        if(timed && timeout <= 0) {
+            System.out.println("Timed out");
+            throw new TimeoutException();
+        }
 
         // A wrapper class to spawn a thread to run this function.
         class MoveThread extends Thread implements Runnable {

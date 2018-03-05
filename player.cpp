@@ -62,7 +62,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     int weight;
     //until time is up, look for better moves
     while ((msLeft < 0 ||
-           difftime(start_time, time(NULL)) > (double) (msLeft + 5) / 1000.)  &&
+           difftime(start_time, time(NULL)) > (double) (msLeft - 25) / 1000.)  &&
            it != moves.end()) {
         weight = board->weightMove(&(*it), side);
         if (weight < minWeight) {
@@ -74,6 +74,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     //Return the move
     Move *ret = new Move(move.getX(),move.getY());
     board->doMove(ret, side);
+    if (!ret) {
+      std:cerr << "WTF" << std::endl;
     return ret;
 }
     
