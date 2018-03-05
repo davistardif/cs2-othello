@@ -227,6 +227,7 @@ int weightMove(Move *move, Side side) {
         }
     }
     int val = temp->count(side) - temp -> count(OPPONENT_SIDE) + side_count - opposite_side_count;
+    delete temp;
     return val;
 }
     

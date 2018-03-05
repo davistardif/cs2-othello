@@ -62,4 +62,10 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     board->doMove(move, side);
     return move;
 }
+
+int *Player::minimax(Board board, int depth, Side side) {
+    if (depth == 0 || node == nullptr){
+        return board;
+    }
+}
     
