@@ -49,11 +49,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      */
     time_t start_time;
     time(&start_time);
-    // if we are out of time, return
-    /* if (msLeft > 0 &&
-        difftime(start_time, time(NULL)) > (double) msLeft / 1000.0) {
-        return nullptr;
-        } */
     board->doMove(opponentsMove, OPPONENT_SIDE);
     std::list<Move> moves = board->getMoves(side);
     // TODO: calculate the heuristic of each move
@@ -68,7 +63,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     while ((msLeft < 0 ||
            difftime(start_time, time(NULL)) > (double) (msLeft - 25) / 1000.)  &&
            it != moves.end()) {
-        weight = minimax(&(*it), board, 2, side);
+        //weight = minimax(&(*it), board, 2, side);
+        weight = board->weightMove(&(*it), side);
         if (weight < minWeight) {
             move = *it;
             minWeight = weight;
