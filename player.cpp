@@ -59,11 +59,12 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     int maxWeight = INT_MIN;
     Move move = *it;
     int weight;
+    int depth = (testingMinimax? 2 : 3);
     //until time is up, look for better moves
-    while ((msLeft < 0 ||
+    while ((msLeft <= 0 ||
            difftime(start_time, time(NULL)) > (double) (msLeft - 25) / 1000.)  &&
            it != moves.end()) {
-        weight = minimax(&(*it), board, 2, side);
+        weight = minimax(&(*it), board, depth, side);
         //weight = board->weightMove(&(*it), side);
         if (weight > maxWeight) {
             move = *it;
@@ -79,11 +80,11 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 
 int Player::minimax(Move *move, Board *curr_board, int depth, Side side) {
     
-    if (depth <= 0 || move == nullptr){
+    if (depth <= 1 || move == nullptr){
         if (testingMinimax) {
-            return curr_board->simpleHeuristic(move, side);
+            return (side==this->side ? 1: -1) * curr_board->simpleHeuristic(move, side);
         }
-        return curr_board->weightMove(move, side);
+        return (side==this->side ? 1: -1) * curr_board->weightMove(move, side);
     }
     int a = INT_MIN;
     Board *temp = curr_board->copy();
