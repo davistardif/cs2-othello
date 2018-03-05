@@ -59,19 +59,22 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     Move move = *it;
     int weight;
     int depth = (testingMinimax? 2 : 3);
+    Board *temp;
     //until time is up, look for better moves
     auto end = std::chrono::high_resolution_clock::now();
     while ((msLeft <= 0 ||
             (end - start).count() * 1000 >  (msLeft - 25))  &&
            it != moves.end()) {
-        end = std::chrono::high_resolution_clock::now();
-        weight = minimax(&(*it), board, depth, side);
+        temp = this->board->copy();
+        temp->doMove(&(*it), side);
+        weight = minimax(temp, depth, side);
         //weight = board->weightMove(&(*it), side);
         if (weight > maxWeight) {
             move = *it;
             maxWeight = weight;
         }
         it++;
+        end = std::chrono::high_resolution_clock::now();
     }
     //Return the move
     Move *ret = new Move(move.getX(),move.getY());
@@ -79,23 +82,24 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return ret;
 }
 
-int Player::minimax(Move *move, Board *curr_board, int depth, Side side) {
+int Player::minimax(Board *curr_board, int depth, Side side) {
     
-    if (depth <= 1 || move == nullptr){
+    if (depth <= 1 || curr_board->isDone()){
         if (testingMinimax) {
-            return (side==this->side ? 1: -1) * curr_board->simpleHeuristic(move, side);
+            return (side==this->side ? 1: -1) * curr_board->simpleHeuristic(side);
         }
-        return (side==this->side ? 1: -1) * curr_board->weightMove(move, side);
+        return (side==this->side ? 1: -1) * curr_board->weightMove(side);
     }
     int a = INT_MIN;
-    Board *temp = curr_board->copy();
-    temp->doMove(move, side);
-    std::list<Move> moves = temp->getMoves(side);
+    Board *temp;
+    std::list<Move> moves = curr_board->getMoves(side);
     std::list<Move>::iterator it = moves.begin(); 
     while (it != moves.end()) {
-        a = std::max(a, -1 * minimax(&(*it), temp, depth - 1, OPPONENT_SIDE));
+        temp = curr_board->copy();
+        temp->doMove(&(*it), side);
+        a = std::max(a, -1 * minimax(temp, depth - 1, OPPONENT_SIDE));
+        delete temp;
         it++;
     }
-    delete temp;
     return a;
 }

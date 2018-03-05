@@ -214,7 +214,7 @@ std::list<Move> Board::getMoves(Side side) {
  * Heuristic function that uses static weights based on board placement
  * as well as the simple heuristic
  */
-int Board::weightMove(Move *move, Side side) {
+int Board::weightMove(Side side) {
     int weights[8][8] = {
         {4, -3, 2, 2, 2, 2, -3, 4},
         {-3, -4, -1, -1, -1, -1, -4, -3},
@@ -224,21 +224,19 @@ int Board::weightMove(Move *move, Side side) {
         {2, -1, 1, 0, 0, 1, -1, 2},
         {-3, -4, -1, -1, -1, -1, -4, -3},
         {4, -3, 2, 2, 2, 2, -3, 4} };
-    Board *temp = this->copy();
-    temp->doMove(move, side);
     int static_val = 0; 
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (temp->get(side, i, j)) {
+            if (this->get(side, i, j)) {
                 static_val += weights[i][j];
             }
-            else if (temp->get(OPPONENT_SIDE, i , j)) {
+            else if (this->get(OPPONENT_SIDE, i , j)) {
                 static_val -= weights[i][j];
             }
         }
     }
-    int pieces_val = temp->count(side) - temp->count(OPPONENT_SIDE);
-    int mobility =  temp->getMoves(OPPONENT_SIDE).size();
+    int pieces_val = this->simpleHeuristic(side);
+    int mobility =  this->getMoves(OPPONENT_SIDE).size();
     return  -2 * mobility + 2 * static_val + pieces_val;
 }
     
@@ -246,11 +244,7 @@ int Board::weightMove(Move *move, Side side) {
  * Returns number of side tiles - number !side tiles
  * After move is performed
  */
-int Board::simpleHeuristic(Move *move, Side side) {
-    Board *temp = this->copy();
-    temp->doMove(move, side);
-    int val = temp->count(side) - temp->count(OPPONENT_SIDE);
-    delete temp;
-    return val;
+int Board::simpleHeuristic(Side side) {
+    return this->count(side) - this->count(OPPONENT_SIDE);
 }
 

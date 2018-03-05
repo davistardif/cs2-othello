@@ -33,8 +33,8 @@ public:
     int countWhite();
     void setBoard(char data[]);
     std::list<Move> getMoves(Side side);
-    int weightMove(Move *move, Side side);
-    int simpleHeuristic(Move *move, Side side);
+    int weightMove(Side side);
+    int simpleHeuristic(Side side);
 };
 
 #endif

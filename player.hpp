@@ -20,7 +20,7 @@ public:
     Board *board;
     Side side;
     Move * doMove(Move *opponentsMove, int msLeft);
-    int minimax(Move *move, Board *curr_board, int depth, Side side);
+    int minimax(Board *curr_board, int depth, Side side);
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;
 };
