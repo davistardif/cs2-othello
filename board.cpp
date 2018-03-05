@@ -210,11 +210,10 @@ std::list<Move> Board::getMoves(Side side) {
     return moves;
 }
 
-Move bestMove() {
+int weightMove(Move *move, Side side) {
     std::vector<std::vector<int>> weights(8, std::vector<int>(8));
     weights = {{4, -3, 2, 2, 2, 2, -3, 4}, {-3, -4, -1, -1, -1, -1, -4, -3}, {2, -1, 1, 0, 0, 1, -1, 2}, {2, -1, 0, 1, 1, 0, -1, 2}, {2, -1, 0, 1, 1, 0, -1, 2}, {2, -1, 1, 0, 0, 1, -1, 2}, {-3, -4, -1, -1, -1, -1, -4, -3}, {4, -3, 2, 2, 2, 2, -3, 4}};
-    std::cout << weights[0][5] << std::endl;
-    std::List<Move> Moves = getMoves(Side side)
+    std::cerr << weights[0][5] << std::endl;
 }
     
 /*

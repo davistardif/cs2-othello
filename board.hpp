@@ -4,6 +4,9 @@
 #include <bitset>
 #include "common.hpp"
 #include <list>
+#include <iostream>
+#include <vector> 
+
 using namespace std;
 
 class Board {
@@ -32,7 +35,7 @@ public:
 
     void setBoard(char data[]);
 
-    std::List<Move> getMoves(Side side);
+    std::list<Move> getMoves(Side side);
     Move bestMove();
     int simpleHeuristic(Move *move, Side side);
 };
