@@ -17,6 +17,10 @@ Player::Player(Side side) {
     board = new Board();
     this->side = side;
 }
+// sets the player's board to a given state
+void Player::setBoard(char data[]){
+    this->board->setBoard(data);
+}
 
 /*
  * Destructor for the player.
@@ -62,9 +66,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     int weight;
     //until time is up, look for better moves
     while ((msLeft < 0 ||
-           difftime(start_time, time(NULL)) > (double) (msLeft + 5) / 1000.)  &&
+           difftime(start_time, time(NULL)) > (double) (msLeft - 25) / 1000.)  &&
            it != moves.end()) {
-        weight = board->weightMove(&(*it), side);
+        weight = minimax(&(*it), board, 4, side);
         if (weight < minWeight) {
             move = *it;
             minWeight = weight;
@@ -77,39 +81,21 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return ret;
 }
 
-int Player::minimax(Move *move, int depth, Side side) {
-    if (testingMinimax) {
-        if (depth <= 0 || move == nullptr){
-            return board->simpleHeuristic(move, side);
-        }
-        int a = -30000;
-        Board *temp = this->copy();
-        temp->doMove(move, side);
-        std::list<Move> moves = temp->getMoves(side);
-        std::list<Move>::iterator it = moves.begin(); 
-        Move move = *it;
-        while (it != moves.end()) {
-            a = std::max(a, -minimax((*it), depth - 1, OPPONENT_SIDE));
-            it++;
-        }
-        return a;
-    }
 
-    else {
-       if (depth <= 0 || move == nullptr){0
-            return board->weightMove(move, side);
-        }
-        int a = -30000;
-        Board *temp = this->copy();
-        temp->doMove(move, side);
-        std::list<Move> moves = temp->getMoves(side);
-        std::list<Move>::iterator it = moves.begin(); 
-        Move move = *it;
-        while (it != moves.end()) {
-            a = std::max(a, -minimax((*it), depth - 1, OPPONENT_SIDE));
-            it++;
-        }
-        return a; 
-    }
+int Player::minimax(Move *move, Board *curr_board, int depth, Side side) {
     
+    if (depth <= 0 || move == nullptr){
+        return curr_board->weightMove(move, side);
+    }
+    int a = INT_MIN;
+    Board *temp = curr_board->copy();
+    temp->doMove(move, side);
+    std::list<Move> moves = temp->getMoves(side);
+    std::list<Move>::iterator it = moves.begin(); 
+    while (it != moves.end()) {
+        a = std::max(a, -minimax(&(*it), temp, depth - 1, OPPONENT_SIDE));
+        it++;
+    }
+    delete temp;
+    return a;
 }
