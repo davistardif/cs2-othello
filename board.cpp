@@ -211,9 +211,23 @@ std::list<Move> Board::getMoves(Side side) {
 }
 
 int weightMove(Move *move, Side side) {
-    std::vector<std::vector<int>> weights(8, std::vector<int>(8));
-    weights = {{4, -3, 2, 2, 2, 2, -3, 4}, {-3, -4, -1, -1, -1, -1, -4, -3}, {2, -1, 1, 0, 0, 1, -1, 2}, {2, -1, 0, 1, 1, 0, -1, 2}, {2, -1, 0, 1, 1, 0, -1, 2}, {2, -1, 1, 0, 0, 1, -1, 2}, {-3, -4, -1, -1, -1, -1, -4, -3}, {4, -3, 2, 2, 2, 2, -3, 4}};
-    std::cerr << weights[0][5] << std::endl;
+    int weights[8][8] = {{4, -3, 2, 2, 2, 2, -3, 4}, {-3, -4, -1, -1, -1, -1, -4, -3}, {2, -1, 1, 0, 0, 1, -1, 2}, {2, -1, 0, 1, 1, 0, -1, 2}, {2, -1, 0, 1, 1, 0, -1, 2}, {2, -1, 1, 0, 0, 1, -1, 2}, {-3, -4, -1, -1, -1, -1, -4, -3}, {4, -3, 2, 2, 2, 2, -3, 4}};
+    Board *temp = this->copy();
+    temp->doMove(move, side);
+    int side_count; 
+    int opposite_side_count;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (temp->get(side, i, j)) {
+                side_count += weights[i][j];
+            }
+            else if (temp->get(OPPONENT_SIDE, i, j)) {
+                opposite_side_count += weights[i][j];
+            }
+        }
+    }
+    int val = temp->count(side) - temp -> count(OPPONENT_SIDE) + side_count - opposite_side_count;
+    return val;
 }
     
 /*
