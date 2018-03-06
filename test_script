@@ -5,7 +5,7 @@ do
     ./testgame SimplePlayer cs2_drop_squad 300000 &
 done
 
-sleep 25
+sleep 100
 
 echo 'We are black'
 for i in {1..20}

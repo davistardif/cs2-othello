@@ -212,7 +212,7 @@ std::list<Move> Board::getMoves(Side side) {
 
 /*
  * Heuristic function that uses static weights based on board placement
- * as well as the simple heuristic
+ * as well as the simple heuristic and mobility of the opponents next move.
  */
 int Board::weightMove(Side side) {
     int weights[8][8] = {
@@ -237,7 +237,7 @@ int Board::weightMove(Side side) {
     }
     int pieces_val = this->simpleHeuristic(side);
     int mobility =  this->getMoves(OPPONENT_SIDE).size();
-    return  -2 * mobility + 2 * static_val + pieces_val;
+    return  -1 * mobility + 4 * static_val + 2 * pieces_val;
 
 }
     

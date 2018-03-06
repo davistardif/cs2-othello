@@ -83,6 +83,19 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return ret;
 }
 
+/*
+ * Minimax algorithm used to evaluate the best moves based on the weightMove
+ * heuristic analysis at a certain depth of moves
+ * 
+ * Inputs: 
+ * curr_board - current state of the board
+ * depth - the depth of moves to be analyzed (more depth = more computational time)
+ * side - side that the player is on
+ *
+ * Outputs: 
+ * Integer value that evaluates the maximum minimum loss. 
+ */
+
 int Player::minimax(Board *curr_board, int depth, Side side) {
     if (depth <= 1 || curr_board->isDone()){
         if (testingMinimax) {
