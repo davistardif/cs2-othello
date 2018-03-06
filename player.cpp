@@ -47,8 +47,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's move before calculating your own move
      */
-    time_t start_time;
-    time(&start_time);
+    auto start = std::chrono::high_resolution_clock::now();
     board->doMove(opponentsMove, OPPONENT_SIDE);
     std::list<Move> moves = board->getMoves(side);
     // TODO: calculate the heuristic of each move
@@ -59,17 +58,24 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     int maxWeight = INT_MIN;
     Move move = *it;
     int weight;
+    int depth = (testingMinimax? 2 : 3);
+    Board *temp;
     //until time is up, look for better moves
-    while ((msLeft < 0 ||
-           difftime(start_time, time(NULL)) > (double) (msLeft - 25) / 1000.)  &&
+    auto end = std::chrono::high_resolution_clock::now();
+    while ((msLeft <= 0 ||
+            (end - start).count() * 1000 >  (msLeft - 25))  &&
            it != moves.end()) {
-        //weight = minimax(&(*it), board, 4, side);
-        weight = board->weightMove(&(*it), side);
+        temp = this->board->copy();
+        temp->doMove(&(*it), side);
+        weight = minimax(temp, depth, side);
+        //weight = board->weightMove(&(*it), side);
+
         if (weight > maxWeight) {
             move = *it;
             maxWeight = weight;
         }
         it++;
+        end = std::chrono::high_resolution_clock::now();
     }
     //Return the move
     Move *ret = new Move(move.getX(),move.getY());
@@ -77,24 +83,23 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return ret;
 }
 
-
-int Player::minimax(Move *move, Board *curr_board, int depth, Side side) {
-    
-    if (depth <= 0 || move == nullptr){
+int Player::minimax(Board *curr_board, int depth, Side side) {
+    if (depth <= 1 || curr_board->isDone()){
         if (testingMinimax) {
-            return curr_board->simpleHeuristic(move, side);
+            return (side==this->side ? 1: -1) * curr_board->simpleHeuristic(side);
         }
-        return curr_board->weightMove(move, side);
+        return (side==this->side ? 1: -1) * curr_board->weightMove(side);
     }
     int a = INT_MIN;
-    Board *temp = curr_board->copy();
-    temp->doMove(move, side);
-    std::list<Move> moves = temp->getMoves(side);
+    Board *temp;
+    std::list<Move> moves = curr_board->getMoves(side);
     std::list<Move>::iterator it = moves.begin(); 
     while (it != moves.end()) {
-        a = std::max(a, -1 * minimax(&(*it), temp, depth - 1, OPPONENT_SIDE));
+        temp = curr_board->copy();
+        temp->doMove(&(*it), side);
+        a = std::max(a, -1 * minimax(temp, depth - 1, OPPONENT_SIDE));
+        delete temp;
         it++;
     }
-    delete temp;
     return a;
 }

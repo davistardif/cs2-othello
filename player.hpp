@@ -7,7 +7,8 @@
 #include "common.hpp"
 #include "board.hpp"
 #include <climits>
-#include <algorithm>
+#include <chrono>
+#include <algorithm> // for std::max()
 using namespace std;
 
 class Player {
@@ -18,8 +19,8 @@ public:
     void setBoard(char *data);
     Board *board;
     Side side;
-    Move *doMove(Move *opponentsMove, int msLeft);
-    int minimax(Move *move, Board *curr_board, int depth, Side side);
+    Move * doMove(Move *opponentsMove, int msLeft);
+    int minimax(Board *curr_board, int depth, Side side);
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;
 };
