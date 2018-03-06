@@ -1,12 +1,12 @@
 #!/bin/bash
 echo 'We are white'
-for i in {1..30}
+for i in {1..20}
 do
     ./testgame SimplePlayer cs2_drop_squad &
 done
-//sleep 60
-//echo 'We are black'
-//for i in {1..10}
-//do
-//    ./testgame cs2_drop_squad SimplePlayer &    
-//done
+sleep 60
+echo 'We are black'
+for i in {1..20}
+do
+    ./testgame cs2_drop_squad SimplePlayer &    
+done

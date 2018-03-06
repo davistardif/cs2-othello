@@ -63,7 +63,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     while ((msLeft < 0 ||
            difftime(start_time, time(NULL)) > (double) (msLeft - 25) / 1000.)  &&
            it != moves.end()) {
-        //weight = minimax(&(*it), board, 2, side);
+        //weight = minimax(&(*it), board, 4, side);
         weight = board->weightMove(&(*it), side);
         if (weight > maxWeight) {
             move = *it;
@@ -81,6 +81,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 int Player::minimax(Move *move, Board *curr_board, int depth, Side side) {
     
     if (depth <= 0 || move == nullptr){
+        if (testingMinimax) {
+            return curr_board->simpleHeuristic(move, side);
+        }
         return curr_board->weightMove(move, side);
     }
     int a = INT_MIN;
@@ -89,7 +92,7 @@ int Player::minimax(Move *move, Board *curr_board, int depth, Side side) {
     std::list<Move> moves = temp->getMoves(side);
     std::list<Move>::iterator it = moves.begin(); 
     while (it != moves.end()) {
-        a = std::max(a, -minimax(&(*it), temp, depth - 1, OPPONENT_SIDE));
+        a = std::max(a, -1 * minimax(&(*it), temp, depth - 1, OPPONENT_SIDE));
         it++;
     }
     delete temp;
