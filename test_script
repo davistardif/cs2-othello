@@ -2,11 +2,11 @@
 echo 'We are white'
 for i in {1..10}
 do
-    ./testgame ConstantTimePlayer cs2_drop_squad 300000 | grep wins &
+    ./testgame ConstantTimePlayer cs2_drop_squad 300000 | grep -E 'wins|Tie' &
 done
 sleep 25
 echo 'We are black'
 for i in {1..10}
 do
-    ./testgame cs2_drop_squad ConstantTimePlayer 300000 | grep wins &    
+    ./testgame cs2_drop_squad ConstantTimePlayer 300000 | grep -E 'wins|Tie' &    
 done

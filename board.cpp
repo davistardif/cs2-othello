@@ -237,16 +237,10 @@ int Board::weightMove(Side side) {
             }
         }
     }
-    int pieces_val;
-    if (turn_num < 10) {
-        //avoid greedy algorithm in early game
-        pieces_val = 0;
-    }
-    else {
-    pieces_val = this->simpleHeuristic(side);
-    }
+    int pieces_val = this->simpleHeuristic(side);
+    pieces_val = (turn_num / 20) * pieces_val;
     int mobility =  this->getMoves(OPPONENT_SIDE).size();
-    if (turn_num < 10) mobility *= 2;
+    if (turn_num < 10) mobility *= 2; //mobility matters in early game
     return  -2 * mobility + 2 * static_val + pieces_val;
 }
     
