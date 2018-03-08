@@ -10,6 +10,7 @@ Board::Board() {
     taken.set(4 + 8 * 4);
     black.set(4 + 8 * 3);
     black.set(3 + 8 * 4);
+    turn_num = 0;
 }
 
 /*
@@ -25,6 +26,7 @@ Board *Board::copy() {
     Board *newBoard = new Board();
     newBoard->black = black;
     newBoard->taken = taken;
+    newBoard->turn_num = turn_num;
     return newBoard;
 }
 
@@ -110,7 +112,7 @@ void Board::doMove(Move *m, Side side) {
 
     // Ignore if move is invalid.
     if (!checkMove(m, side)) return;
-
+    turn_num++;
     int X = m->getX();
     int Y = m->getY();
     Side other = (side == BLACK) ? WHITE : BLACK;
@@ -237,6 +239,7 @@ int Board::weightMove(Side side) {
     }
     int pieces_val = this->simpleHeuristic(side);
     int mobility =  this->getMoves(OPPONENT_SIDE).size();
+    if (turn_num < 10) mobility *= 2;
     return  -2 * mobility + 2 * static_val + pieces_val;
 }
     

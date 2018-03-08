@@ -14,6 +14,7 @@ class Board {
 private:
     bitset<64> black;
     bitset<64> taken;
+    int turn_num;
 
     bool occupied(int x, int y);
     bool get(Side side, int x, int y);
