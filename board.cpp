@@ -218,14 +218,14 @@ std::list<Move> Board::getMoves(Side side) {
  */
 int Board::weightMove(Side side) {
     int weights[8][8] = {
-        {6, -4, 2, 2, 2, 2, -4, 6},
-        {-4, -3, -1, -1, -1, -1, -3, -4},
+        {8, -4, 2, 2, 2, 2, -4, 8},
+        {-4, -5, -1, -1, -1, -1, -5, -4},
         {2, -1, 1, 0, 0, 1, -1, 2},
         {2, -1, 0, 1, 1, 0, -1, 2},
         {2, -1, 0, 1, 1, 0, -1, 2},
         {2, -1, 1, 0, 0, 1, -1, 2},
-        {-4, -3, -1, -1, -1, -1, -3, -4},
-        {6, -4, 2, 2, 2, 2, -4, 6} };
+        {-4, -5, -1, -1, -1, -1, -5, -4},
+        {8, -4, 2, 2, 2, 2, -4, 8} };
     int static_val = 0; 
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -237,7 +237,14 @@ int Board::weightMove(Side side) {
             }
         }
     }
-    int pieces_val = this->simpleHeuristic(side);
+    int pieces_val;
+    if (turn_num < 10) {
+        //avoid greedy algorithm in early game
+        pieces_val = 0;
+    }
+    else {
+    pieces_val = this->simpleHeuristic(side);
+    }
     int mobility =  this->getMoves(OPPONENT_SIDE).size();
     if (turn_num < 10) mobility *= 2;
     return  -2 * mobility + 2 * static_val + pieces_val;
