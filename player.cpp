@@ -58,7 +58,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     int maxWeight = INT_MIN;
     Move move = *it;
     int weight;
-    int depth = (testingMinimax? 2 : 3);
+    int depth = (testingMinimax? 2 : 5);
     Board *temp;
     //until time is up, look for better moves
     auto end = std::chrono::high_resolution_clock::now();
@@ -67,12 +67,13 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
            it != moves.end()) {
         temp = this->board->copy();
         temp->doMove(&(*it), side);
-        weight = minimax(temp, depth, side);
-        //weight = board->weightMove(&(*it), side);
+        weight = minimax(temp, depth, OPPONENT_SIDE, INT_MIN, INT_MAX);
+        //weight = temp->weightMove(side);
         if (weight > maxWeight) {
             move = *it;
             maxWeight = weight;
         }
+        delete temp;
         it++;
         end = std::chrono::high_resolution_clock::now();
     }
@@ -82,23 +83,28 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return ret;
 }
 
-int Player::minimax(Board *curr_board, int depth, Side side) {
-    
+int Player::minimax(Board *curr_board, int depth, Side side, int alpha, int beta) {
     if (depth <= 1 || curr_board->isDone()){
         if (testingMinimax) {
-            return (side==this->side ? 1: -1) * curr_board->simpleHeuristic(side);
+            return curr_board->simpleHeuristic(this->side);
         }
-        return (side==this->side ? 1: -1) * curr_board->weightMove(side);
+        return curr_board->weightMove(this->side);
     }
-    int a = INT_MIN;
+    int a = (side == this->side ? INT_MIN : INT_MAX);
     Board *temp;
     std::list<Move> moves = curr_board->getMoves(side);
     std::list<Move>::iterator it = moves.begin(); 
     while (it != moves.end()) {
         temp = curr_board->copy();
         temp->doMove(&(*it), side);
-        a = std::max(a, -1 * minimax(temp, depth - 1, OPPONENT_SIDE));
+        int res = minimax(temp, depth - 1, OPPONENT_SIDE, alpha, beta);
+        a = (side == this->side ? std::max(a, res) : std::min(a, res));
         delete temp;
+        //pruning
+        if (side == this->side && a >= beta) return a;
+        else if (side != this->side && a <= alpha) return a;
+        if (side == this->side && a > alpha) alpha = a;
+        else if (side != this->side && a < beta) beta = a;
         it++;
     }
     return a;

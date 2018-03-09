@@ -4,7 +4,7 @@ for i in {1..10}
 do
     ./testgame ConstantTimePlayer cs2_drop_squad 300000 | grep -E 'wins|Tie' &
 done
-sleep 25
+sleep 35
 echo 'We are black'
 for i in {1..10}
 do
