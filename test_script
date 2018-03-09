@@ -1,12 +1,12 @@
 #!/bin/bash
 echo 'We are white'
-for i in {1..10}
+for i in {1..20}
 do
     ./testgame ConstantTimePlayer cs2_drop_squad 300000 | grep -E 'wins|Tie' &
 done
 sleep 35
 echo 'We are black'
-for i in {1..10}
+for i in {1..20}
 do
     ./testgame cs2_drop_squad ConstantTimePlayer 300000 | grep -E 'wins|Tie' &    
 done

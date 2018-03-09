@@ -83,7 +83,23 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return ret;
 }
 
+
 int Player::minimax(Board *curr_board, int depth, Side side, int alpha, int beta) {
+
+/*
+ * Minimax algorithm used to evaluate the best moves based on the weightMove
+ * heuristic analysis at a certain depth of moves
+ * 
+ * Inputs: 
+ * curr_board - current state of the board
+ * depth - the depth of moves to be analyzed (more depth = more computational time)
+ * side - side that is currently playing
+ * alpha - for pruning -- initially call with INT_MIN
+ * beta - for pruning -- initially call with INT_MAX
+ * Outputs: 
+ * Integer value that evaluates heuristic of a given board several moves later 
+ */
+
     if (depth <= 1 || curr_board->isDone()){
         if (testingMinimax) {
             return curr_board->simpleHeuristic(this->side);
