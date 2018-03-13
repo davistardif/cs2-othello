@@ -241,7 +241,7 @@ int Board::weightMove(Side side) {
     pieces_val = (turn_num / 20) * pieces_val;
     int mobility =  this->getMoves(OPPONENT_SIDE).size();
     if (turn_num < 10) mobility *= 2; //mobility matters in early game
-    return  -2 * mobility + 2 * static_val + pieces_val;
+    return  -1 * mobility + 4 * static_val + 4 * pieces_val;
 }
     
 /*
