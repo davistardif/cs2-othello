@@ -1,6 +1,3 @@
-sample text
-davis is a daddy
-
 Team Members: Eric, Davis
 
 
